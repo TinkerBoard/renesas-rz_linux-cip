@@ -185,6 +185,12 @@ static int rtl8211f_config_init(struct phy_device *phydev)
 	u16 val;
 	int ret;
 
+	pr_info("RTL8211F : lan-led setting\n");
+	phy_write(phydev, 0x1f, 0x0d04);
+	phy_write(phydev, 0x11, 0x0000);
+	phy_write(phydev, 0x10, 0xec48);
+	phy_write(phydev, 0x1f, 0x0000);
+
 	val = RTL8211F_ALDPS_ENABLE | RTL8211F_ALDPS_PLL_OFF | RTL8211F_ALDPS_XTAL_OFF;
 	phy_modify_paged_changed(phydev, 0xa43, RTL8211F_PHYCR1, val, val);
 
