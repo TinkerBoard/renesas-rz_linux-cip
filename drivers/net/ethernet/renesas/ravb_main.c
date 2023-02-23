@@ -34,6 +34,7 @@
 #include <asm/div64.h>
 
 #include "ravb.h"
+#include "eth_mac_tinker.h"
 
 #define RAVB_DEF_MSG_ENABLE \
 		(NETIF_MSG_LINK	  | \
@@ -127,6 +128,7 @@ static void ravb_set_buffer_align(struct sk_buff *skb)
  * Ethernet AVB device doesn't have ROM for MAC address.
  * This function gets the MAC address that was used by a bootloader.
  */
+#ifndef TINKER_V
 static void ravb_read_mac_address(struct net_device *ndev, const u8 *mac)
 {
 	if (!IS_ERR(mac)) {
@@ -143,6 +145,7 @@ static void ravb_read_mac_address(struct net_device *ndev, const u8 *mac)
 		ndev->dev_addr[5] = (malr >>  0) & 0xFF;
 	}
 }
+#endif
 
 static void ravb_mdio_ctrl(struct mdiobb_ctrl *ctrl, u32 mask, int set)
 {
@@ -2556,6 +2559,9 @@ static int ravb_probe(struct platform_device *pdev)
 	int error, irq, q;
 	struct resource *res;
 	int i;
+#ifdef TINKER_V
+	int emac_num = -1;
+#endif
 
 	if (!np) {
 		dev_err(&pdev->dev,
@@ -2722,7 +2728,16 @@ static int ravb_probe(struct platform_device *pdev)
 	priv->msg_enable = RAVB_DEF_MSG_ENABLE;
 
 	/* Read and set MAC address */
+#ifdef TINKER_V
+	if (!strcmp(pdev->name, "11c20000.ethernet"))
+		emac_num = 0;
+	else
+		emac_num = 1;
+	eth_mac_eeprom(ndev->dev_addr, emac_num);
+#else
 	ravb_read_mac_address(ndev, of_get_mac_address(np));
+#endif
+
 	if (!is_valid_ether_addr(ndev->dev_addr)) {
 		dev_warn(&pdev->dev,
 			 "no valid MAC address supplied, using a random one\n");

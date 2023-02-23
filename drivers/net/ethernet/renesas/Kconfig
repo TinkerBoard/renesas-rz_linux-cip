@@ -42,4 +42,9 @@ config RAVB
 	  This driver supports the following SoCs:
 		- R8A779x.
 
+config TINKER_V_ETH
+	bool "Support Tinker V Ethernet"
+	help
+	  Support Tinker V Ethernet.
+
 endif # NET_VENDOR_RENESAS
