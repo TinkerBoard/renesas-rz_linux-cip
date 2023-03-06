@@ -13,6 +13,9 @@
 		i2c0 = &i2c0;
 		i2c1 = &i2c1;
 		serial0 = &scif0;
+		serial1 = &scif1;
+		serial3 = &scif3;
+		serial4 = &scif4;
 		mmc0 = &sdhi0;
 		mmc1 = &sdhi1;
 		ethernet0 = &eth0;
@@ -288,6 +291,23 @@
 			 <RZG2L_PORT_PINMUX(6, 3, 6)>; /* RX */
 	};
 
+	scif1_pins: scif1 {
+		pinmux = <RZG2L_PORT_PINMUX(14, 0, 1)>, /* TX */
+			 <RZG2L_PORT_PINMUX(14, 1, 1)>, /* RX */
+			 <RZG2L_PORT_PINMUX(16, 0, 1)>, /* CTS */
+			 <RZG2L_PORT_PINMUX(16, 1, 1)>; /* RTS */
+	};
+
+	scif3_pins: scif3 {
+		pinmux = <RZG2L_PORT_PINMUX(18, 2, 7)>, /* TX */
+			 <RZG2L_PORT_PINMUX(18, 1, 7)>; /* RX */
+	};
+
+	scif4_pins: scif4 {
+		pinmux = <RZG2L_PORT_PINMUX(18, 5, 7)>, /* TX */
+			 <RZG2L_PORT_PINMUX(18, 4, 7)>; /* RX */
+	};
+
 	sd1_pwr_en {
 		gpio-hog;
 		gpios = <RZG2L_GPIO(0, 3) GPIO_ACTIVE_HIGH>;
@@ -389,6 +409,24 @@
 
 &scif0 {
 	pinctrl-0 = <&scif0_pins>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&scif1 {
+	pinctrl-0 = <&scif1_pins>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&scif3 {
+	pinctrl-0 = <&scif3_pins>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&scif4 {
+	pinctrl-0 = <&scif4_pins>;
 	pinctrl-names = "default";
 	status = "okay";
 };
