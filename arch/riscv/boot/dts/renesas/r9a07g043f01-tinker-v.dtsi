@@ -103,13 +103,11 @@
 	clock-frequency = <12288000>;
 };
 
-#if (SW_SW0_DEV_SEL)
 &adc {
-        pinctrl-0 = <&adc_pins>;
-        pinctrl-names = "default";
-        status = "okay";
+	pinctrl-0 = <&adc_pins>;
+	pinctrl-names = "default";
+	status = "okay";
 };
-#endif
 
 &canfd {
 	pinctrl-0 = <&canfd0_pins &canfd1_pins>;
@@ -225,11 +223,9 @@
 	pinctrl-0 = <&sound_clk_pins>;
 	pinctrl-names = "default";
 
-#if (SW_SW0_DEV_SEL)
 	adc_pins: adc {
-		pinmux = <RZG2L_PORT_PINMUX(6, 2, 1)>; /* ADC_TRG */
+		pinmux = <RZG2L_PORT_PINMUX(5, 1, 4)>; /* ADC_TRG */
 	};
-#endif
 
 	canfd0_en {
 		gpio-hog;
