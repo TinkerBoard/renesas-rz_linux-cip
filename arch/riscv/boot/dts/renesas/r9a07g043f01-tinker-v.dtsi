@@ -177,6 +177,12 @@
 	pinctrl-0 = <&i2c1_pins>;
 	pinctrl-names = "default";
 	status = "okay";
+
+	m24c08@50 {
+		compatible = "atmel,24c08";
+		reg = <0x50>;
+		status = "okay";
+	};
 };
 
 &phyrst {
