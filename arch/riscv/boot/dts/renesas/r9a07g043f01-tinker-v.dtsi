@@ -227,28 +227,14 @@
 		pinmux = <RZG2L_PORT_PINMUX(5, 1, 4)>; /* ADC_TRG */
 	};
 
-	canfd0_en {
-		gpio-hog;
-		gpios = <RZG2L_GPIO(2, 2) GPIO_ACTIVE_LOW>;
-		output-high;
-		line-name = "canfd0_en";
-	};
-
-	canfd1_en {
-		gpio-hog;
-		gpios = <RZG2L_GPIO(2, 3) GPIO_ACTIVE_LOW>;
-		output-high;
-		line-name = "canfd1_en";
-	};
-
 	canfd0_pins: can0 {
-		pinmux = <RZG2L_PORT_PINMUX(1, 1, 3)>, /* TX */
-			 <RZG2L_PORT_PINMUX(1, 2, 3)>; /* RX */
+		pinmux = <RZG2L_PORT_PINMUX(13, 1, 3)>, /* TX */
+			 <RZG2L_PORT_PINMUX(13, 2, 3)>; /* RX */
 	};
 
 	canfd1_pins: can1 {
-		pinmux = <RZG2L_PORT_PINMUX(2, 0, 3)>, /* TX */
-			 <RZG2L_PORT_PINMUX(2, 1, 3)>; /* RX */
+		pinmux = <RZG2L_PORT_PINMUX(17, 0, 3)>, /* TX */
+			 <RZG2L_PORT_PINMUX(17, 1, 3)>; /* RX */
 	};
 
 	ether0_pins: eth0 {
