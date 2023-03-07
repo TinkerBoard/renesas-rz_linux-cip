@@ -18,6 +18,7 @@
 #include <linux/pinctrl/pinctrl.h>
 #include <linux/pinctrl/pinmux.h>
 #include <linux/spinlock.h>
+#include <linux/sys_soc.h>
 
 #include <dt-bindings/pinctrl/rzg2l-pinctrl.h>
 
@@ -98,6 +99,13 @@
 #define SD_CH(n)		(0x3000 + (n) * 4)
 #define QSPI			(0x3008)
 #define ETH_CH(n)		(0x300C + (n) * 4)
+
+#define P_EX(n)			(0x0000 + 0x06 + (n-19))
+#define PM_EX(n)		(0x0100 + 0x0c + (n-19) * 2)
+#define PMC_EX(n)		(0x0200 + 0x06 + (n-19))
+#define PFC_EX(n)		(0x0400 + 0x18 + (n-19) * 4)
+#define PIN_EX(n)		(0x0800 + 0x06 + (n-19))
+#define ISEL_EX(n)		(0x2C00 + 0x30 + (n-19) * 8)
 
 #define PVDD_1800		1	/* I/O domain voltage <= 1.8V */
 #define PVDD_3300		0	/* I/O domain voltage >= 3.3V */
@@ -237,6 +245,60 @@ static const int rzg2ul_pin_info[] = {
 	RZG2L_PIN_INFO(18, 3), RZG2L_PIN_INFO(18, 4), RZG2L_PIN_INFO(18, 5),
 };
 
+static const int rzfive_pin_info[] = {
+	RZG2L_PIN_INFO(0,  0), RZG2L_PIN_INFO(0,  1), RZG2L_PIN_INFO(0,  2),
+	RZG2L_PIN_INFO(0,  3),
+	RZG2L_PIN_INFO(1,  0), RZG2L_PIN_INFO(1,  1), RZG2L_PIN_INFO(1,  2),
+	RZG2L_PIN_INFO(1,  3), RZG2L_PIN_INFO(1,  4),
+	RZG2L_PIN_INFO(2,  0), RZG2L_PIN_INFO(2,  1), RZG2L_PIN_INFO(2,  2),
+	RZG2L_PIN_INFO(2,  3),
+	RZG2L_PIN_INFO(3,  0), RZG2L_PIN_INFO(3,  1), RZG2L_PIN_INFO(3,  2),
+	RZG2L_PIN_INFO(3,  3),
+	RZG2L_PIN_INFO(4,  0), RZG2L_PIN_INFO(4,  1), RZG2L_PIN_INFO(4,  2),
+	RZG2L_PIN_INFO(4,  3), RZG2L_PIN_INFO(4,  4), RZG2L_PIN_INFO(4,  5),
+	RZG2L_PIN_INFO(5,  0), RZG2L_PIN_INFO(5,  1), RZG2L_PIN_INFO(5,  2),
+	RZG2L_PIN_INFO(5,  3), RZG2L_PIN_INFO(5,  4),
+	RZG2L_PIN_INFO(6,  0), RZG2L_PIN_INFO(6,  1), RZG2L_PIN_INFO(6,  2),
+	RZG2L_PIN_INFO(6,  3), RZG2L_PIN_INFO(6,  4),
+	RZG2L_PIN_INFO(7,  0), RZG2L_PIN_INFO(7,  1), RZG2L_PIN_INFO(7,  2),
+	RZG2L_PIN_INFO(7,  3), RZG2L_PIN_INFO(7,  4),
+	RZG2L_PIN_INFO(8,  0), RZG2L_PIN_INFO(8,  1), RZG2L_PIN_INFO(8,  2),
+	RZG2L_PIN_INFO(8,  3), RZG2L_PIN_INFO(8,  4),
+	RZG2L_PIN_INFO(9,  0), RZG2L_PIN_INFO(9,  1), RZG2L_PIN_INFO(9,  2),
+	RZG2L_PIN_INFO(9,  3),
+	RZG2L_PIN_INFO(10, 0), RZG2L_PIN_INFO(10, 1), RZG2L_PIN_INFO(10, 2),
+	RZG2L_PIN_INFO(10, 3), RZG2L_PIN_INFO(10, 4),
+	RZG2L_PIN_INFO(11, 0), RZG2L_PIN_INFO(11, 1), RZG2L_PIN_INFO(11, 2),
+	RZG2L_PIN_INFO(11, 3),
+	RZG2L_PIN_INFO(12, 0), RZG2L_PIN_INFO(12, 1),
+	RZG2L_PIN_INFO(13, 0), RZG2L_PIN_INFO(13, 1), RZG2L_PIN_INFO(13, 2),
+	RZG2L_PIN_INFO(13, 3), RZG2L_PIN_INFO(13, 4),
+	RZG2L_PIN_INFO(14, 0), RZG2L_PIN_INFO(14, 1), RZG2L_PIN_INFO(14, 2),
+	RZG2L_PIN_INFO(15, 0), RZG2L_PIN_INFO(15, 1), RZG2L_PIN_INFO(15, 2),
+	RZG2L_PIN_INFO(15, 3),
+	RZG2L_PIN_INFO(16, 0), RZG2L_PIN_INFO(16, 1),
+	RZG2L_PIN_INFO(17, 0), RZG2L_PIN_INFO(17, 1), RZG2L_PIN_INFO(17, 2),
+	RZG2L_PIN_INFO(17, 3),
+	RZG2L_PIN_INFO(18, 0), RZG2L_PIN_INFO(18, 1), RZG2L_PIN_INFO(18, 2),
+	RZG2L_PIN_INFO(18, 3), RZG2L_PIN_INFO(18, 4), RZG2L_PIN_INFO(18, 5),
+	RZG2L_PIN_INFO(19, 0), RZG2L_PIN_INFO(19, 1), RZG2L_PIN_INFO(19, 2),
+	RZG2L_PIN_INFO(20, 0), RZG2L_PIN_INFO(20, 1), RZG2L_PIN_INFO(20, 2),
+	RZG2L_PIN_INFO(20, 3), RZG2L_PIN_INFO(20, 4), RZG2L_PIN_INFO(20, 5),
+	RZG2L_PIN_INFO(20, 6), RZG2L_PIN_INFO(20, 7),
+	RZG2L_PIN_INFO(21, 0), RZG2L_PIN_INFO(21, 1),
+	RZG2L_PIN_INFO(22, 0), RZG2L_PIN_INFO(22, 1), RZG2L_PIN_INFO(22, 2),
+	RZG2L_PIN_INFO(22, 3),
+	RZG2L_PIN_INFO(23, 0), RZG2L_PIN_INFO(23, 1), RZG2L_PIN_INFO(23, 2),
+	RZG2L_PIN_INFO(23, 3), RZG2L_PIN_INFO(23, 4), RZG2L_PIN_INFO(23, 5),
+	RZG2L_PIN_INFO(24, 0), RZG2L_PIN_INFO(24, 1), RZG2L_PIN_INFO(24, 2),
+	RZG2L_PIN_INFO(24, 3), RZG2L_PIN_INFO(24, 4), RZG2L_PIN_INFO(24, 5),
+	RZG2L_PIN_INFO(25, 0), RZG2L_PIN_INFO(25, 1),
+	RZG2L_PIN_INFO(26, 0), // dummy
+	RZG2L_PIN_INFO(27, 0), // dummy
+	RZG2L_PIN_INFO(28, 0), RZG2L_PIN_INFO(28, 1), RZG2L_PIN_INFO(28, 2),
+	RZG2L_PIN_INFO(28, 3), RZG2L_PIN_INFO(28, 4), RZG2L_PIN_INFO(28, 5),
+};
+
 struct rzg2l_dedicated_configs {
 	const char *name;
 	u32 config;
@@ -284,6 +346,11 @@ struct rzg2l_pinctrl {
 static const unsigned int iolh_groupa_mA[] = { 2, 4, 8, 12 };
 static const unsigned int iolh_groupb_oi[] = { 100, 66, 50, 33 };
 
+static const struct soc_device_attribute rzfive_match[] = {
+	{ .family = "RZ/Five" },
+	{ /* sentinel*/ }
+};
+
 static void rzg2l_pinctrl_set_pfc_mode(struct rzg2l_pinctrl *pctrl,
 				       u8 port, u8 pin, u8 func)
 {
@@ -292,31 +359,59 @@ static void rzg2l_pinctrl_set_pfc_mode(struct rzg2l_pinctrl *pctrl,
 
 	spin_lock_irqsave(&pctrl->lock, flags);
 
-	/* Set pin to 'Non-use (Hi-Z input protection)'  */
-	reg = readw(pctrl->base + PM(port));
-	reg &= ~(PM_MASK << (pin * 2));
-	writew(reg, pctrl->base + PM(port));
+	if (soc_device_match(rzfive_match) && (port > 18)) {
+		/* Set pin to 'Non-use (Hi-Z input protection)'  */
+		reg = readw(pctrl->base + PM_EX(port));
+		reg &= ~(PM_MASK << (pin * 2));
+		writew(reg, pctrl->base + PM_EX(port));
 
-	/* Temporarily switch to GPIO mode with PMC register */
-	reg = readb(pctrl->base + PMC(port));
-	writeb(reg & ~BIT(pin), pctrl->base + PMC(port));
+		/* Temporarily switch to GPIO mode with PMC register */
+		reg = readb(pctrl->base + PMC_EX(port));
+		writeb(reg & ~BIT(pin), pctrl->base + PMC_EX(port));
 
-	/* Set the PWPR register to allow PFC register to write */
-	writel(0x0, pctrl->base + PWPR);        /* B0WI=0, PFCWE=0 */
-	writel(PWPR_PFCWE, pctrl->base + PWPR);  /* B0WI=0, PFCWE=1 */
+		/* Set the PWPR register to allow PFC register to write */
+		writel(0x0, pctrl->base + PWPR);        /* B0WI=0, PFCWE=0 */
+		writel(PWPR_PFCWE, pctrl->base + PWPR);  /* B0WI=0, PFCWE=1 */
 
-	/* Select Pin function mode with PFC register */
-	reg = readl(pctrl->base + PFC(port));
-	reg &= ~(PFC_MASK << (pin * 4));
-	writel(reg | (func << (pin * 4)), pctrl->base + PFC(port));
+		/* Select Pin function mode with PFC register */
+		reg = readl(pctrl->base + PFC_EX(port));
+		reg &= ~(PFC_MASK << (pin * 4));
+		writel(reg | (func << (pin * 4)), pctrl->base + PFC_EX(port));
 
-	/* Set the PWPR register to be write-protected */
-	writel(0x0, pctrl->base + PWPR);        /* B0WI=0, PFCWE=0 */
-	writel(PWPR_B0WI, pctrl->base + PWPR);  /* B0WI=1, PFCWE=0 */
+		/* Set the PWPR register to be write-protected */
+		writel(0x0, pctrl->base + PWPR);        /* B0WI=0, PFCWE=0 */
+		writel(PWPR_B0WI, pctrl->base + PWPR);  /* B0WI=1, PFCWE=0 */
 
-	/* Switch to Peripheral pin function with PMC register */
-	reg = readb(pctrl->base + PMC(port));
-	writeb(reg | BIT(pin), pctrl->base + PMC(port));
+		/* Switch to Peripheral pin function with PMC register */
+		reg = readb(pctrl->base + PMC_EX(port));
+		writeb(reg | BIT(pin), pctrl->base + PMC_EX(port));
+	} else {
+		/* Set pin to 'Non-use (Hi-Z input protection)'  */
+		reg = readw(pctrl->base + PM(port));
+		reg &= ~(PM_MASK << (pin * 2));
+		writew(reg, pctrl->base + PM(port));
+
+		/* Temporarily switch to GPIO mode with PMC register */
+		reg = readb(pctrl->base + PMC(port));
+		writeb(reg & ~BIT(pin), pctrl->base + PMC(port));
+
+		/* Set the PWPR register to allow PFC register to write */
+		writel(0x0, pctrl->base + PWPR);        /* B0WI=0, PFCWE=0 */
+		writel(PWPR_PFCWE, pctrl->base + PWPR);  /* B0WI=0, PFCWE=1 */
+
+		/* Select Pin function mode with PFC register */
+		reg = readl(pctrl->base + PFC(port));
+		reg &= ~(PFC_MASK << (pin * 4));
+		writel(reg | (func << (pin * 4)), pctrl->base + PFC(port));
+
+		/* Set the PWPR register to be write-protected */
+		writel(0x0, pctrl->base + PWPR);        /* B0WI=0, PFCWE=0 */
+		writel(PWPR_B0WI, pctrl->base + PWPR);  /* B0WI=1, PFCWE=0 */
+
+		/* Switch to Peripheral pin function with PMC register */
+		reg = readb(pctrl->base + PMC(port));
+		writeb(reg | BIT(pin), pctrl->base + PMC(port));
+	}
 
 	spin_unlock_irqrestore(&pctrl->lock, flags);
 };
@@ -1512,6 +1607,38 @@ static const u32 r9a07g043_gpio_configs[] = {
 	RZG2L_GPIO_PORT_PACK(6, 0x22, RZG2L_MPXED_PIN_FUNCS),
 };
 
+static const u32 r9a07g043f_gpio_configs[] = {
+	RZG2L_GPIO_PORT_PACK(4, 0x10, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(5, 0x11, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH0)),
+	RZG2L_GPIO_PORT_PACK(4, 0x12, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH0)),
+	RZG2L_GPIO_PORT_PACK(4, 0x13, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH0)),
+	RZG2L_GPIO_PORT_PACK(6, 0x14, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH0)),
+	RZG2L_GPIO_PORT_PACK(5, 0x15, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(5, 0x16, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(5, 0x17, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH1)),
+	RZG2L_GPIO_PORT_PACK(5, 0x18, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH1)),
+	RZG2L_GPIO_PORT_PACK(4, 0x19, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH1)),
+	RZG2L_GPIO_PORT_PACK(5, 0x1a, RZG2L_MPXED_ETH_PIN_FUNCS(PIN_CFG_IO_VMC_ETH1)),
+	RZG2L_GPIO_PORT_PACK(4, 0x1b, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(2, 0x1c, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(5, 0x1d, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(3, 0x1e, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(4, 0x1f, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(2, 0x20, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(4, 0x21, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(6, 0x22, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(3, 0x06, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(8, 0x07, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(2, 0x08, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(4, 0x09, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(6, 0x0a, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(6, 0x0b, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(2, 0x0c, RZG2L_MPXED_PIN_FUNCS),
+	RZG2L_GPIO_PORT_PACK(1, 0x0d, RZG2L_MPXED_PIN_FUNCS),	//dummy
+	RZG2L_GPIO_PORT_PACK(1, 0x0e, RZG2L_MPXED_PIN_FUNCS),	//dummy
+	RZG2L_GPIO_PORT_PACK(6, 0x0f, RZG2L_MPXED_PIN_FUNCS),
+};
+
 static struct {
 	struct rzg2l_dedicated_configs common[35];
 	struct rzg2l_dedicated_configs rzg2l_pins[7];
@@ -1880,12 +2007,12 @@ static struct rzg2l_pinctrl_data r9a07g043_data = {
 
 static struct rzg2l_pinctrl_data r9a07g043f_data = {
 	.port_pins = rzg2l_gpio_names,
-	.port_pin_configs = r9a07g043_gpio_configs,
+	.port_pin_configs = r9a07g043f_gpio_configs,
 	.dedicated_pins = rzg2l_dedicated_pins.common,
-	.n_port_pins = ARRAY_SIZE(r9a07g043_gpio_configs) * RZG2L_PINS_PER_PORT,
+	.n_port_pins = ARRAY_SIZE(r9a07g043f_gpio_configs) * RZG2L_PINS_PER_PORT,
 	.n_dedicated_pins = ARRAY_SIZE(rzg2l_dedicated_pins.common),
-	.pin_info = rzg2ul_pin_info,
-	.ngpioints = ARRAY_SIZE(rzg2ul_pin_info),
+	.pin_info = rzfive_pin_info,
+	.ngpioints = ARRAY_SIZE(rzfive_pin_info),
 	.irq_mask = true,
 };
 
