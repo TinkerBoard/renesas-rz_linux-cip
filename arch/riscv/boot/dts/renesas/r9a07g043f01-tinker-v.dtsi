@@ -291,6 +291,13 @@
 		line-name = "sd1_pwr_en";
 	};
 
+	sw_et0_en {
+		gpio-hog;
+		gpios = <RZG2L_GPIO(6, 0) GPIO_ACTIVE_HIGH>;
+		output-low;
+		line-name = "sw_et0_en";
+	};
+
 #if (SW_SW0_DEV_SEL)
 	/* Support pinctrl for MMC function of SDHI0*/
 	sdhi0_pins: sd0 {
